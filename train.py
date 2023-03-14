@@ -5,7 +5,7 @@ import sys
 import os
 import torch
 from torch.utils.data import DataLoader
-from models.UNET_tv_lightning_affine_hypernet import NP
+from models.model import NPP
 from dataset.mri_dataset_affine import Generate_dataset
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import LearningRateMonitor, ModelCheckpoint
@@ -101,12 +101,12 @@ def main(argv):
         print("Found pretrained model at %s, loading..." % pretrained_filename)
         # Automatically loads the model with the saved hyperparameters
         state_dict = torch.load(pretrained_filename)
-        model = NP(args.learning_rate)
+        model = NPP(args.learning_rate)
         model.load_state_dict(state_dict['state_dict'],strict=False)
         trainer.fit(model, train_dataloader, val_dataloader)
     else:
         pl.seed_everything(42)  # To be reproducable
-        model = NP(args.learning_rate)
+        model = NPP(args.learning_rate)
         trainer.fit(model, train_dataloader, val_dataloader,ckpt_path= resume_path)
     return model
 

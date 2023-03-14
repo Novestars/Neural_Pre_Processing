@@ -188,7 +188,7 @@ class UNet(nn.Module):
         output_warped = torch.nn.functional.grid_sample(output_warped, x0_0_warp, align_corners=False)
 
         return output,output_warped,input,x0_0_warp,output_warped_atlas
-class NP(LightningModule):
+class NPP(LightningModule): 
     def __init__(
         self,
         lr,
