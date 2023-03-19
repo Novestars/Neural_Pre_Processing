@@ -27,7 +27,8 @@ Please read the brief instructions at the top of the downloaded script.
 ## Usage
 Once you download the Neural Pre-processing docker script, you can use NPP with the following command-line syntax:
 
-npp -i input -o preprocessed
+```npp -i input -o preprocessed```
+
 Note: Please replace npp with the actual name of the NPP command-line tool.
 
 In this command, "input" represents the path to the input image and "preprocessed" is the pre-processed output. NPP generates brain mask, intensity normalized brain and intensity normalized brain in the standard coordinate space. For the large majority of images with voxel sizes near 1 mm3, NPP should run in less than 10 seconds on the CPU. As image size or resolution increases, the runtime might increase as well. If you encounter any issues, please contact the NPP development team for support.
