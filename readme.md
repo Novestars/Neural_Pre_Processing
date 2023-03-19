@@ -24,7 +24,7 @@ Docker: To download the Docker-based wrapper script, run:
 curl -O https://raw.githubusercontent.com/ourrepository/npp/main/npp-docker && chmod +x npp-docker
 Please read the brief instructions at the top of the downloaded script. 
 
-# VoxelMorph Papers
+# NPP Papers
 
 If you use NPP or some part of the code, please cite:
 
