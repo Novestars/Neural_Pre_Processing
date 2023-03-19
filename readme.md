@@ -24,6 +24,14 @@ Docker: To download the Docker-based wrapper script, run:
 curl -O https://raw.githubusercontent.com/ourrepository/npp/main/npp-docker && chmod +x npp-docker
 Please read the brief instructions at the top of the downloaded script. 
 
+# VoxelMorph Papers
+
+If you use NPP or some part of the code, please cite:
+
+  * Neural Pre-processing:   
+
+    **Neural Pre-Processing: A Learning Framework for End-to-end Brain MRI Pre-processing.**  
+
 ## Usage
 Once you download the Neural Pre-processing docker script, you can use NPP with the following command-line syntax:
 
