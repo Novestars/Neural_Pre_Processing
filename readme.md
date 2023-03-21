@@ -24,6 +24,15 @@ Docker: To download the Docker-based wrapper script, run:
 
 ```curl -O https://raw.githubusercontent.com/Novestars/Neural-Pre-processing/blob/master/npp_docker && chmod +x npp_docker``` 
 Please read the brief instructions at the top of the downloaded script. 
+### Usage
+Once you download the Neural Pre-processing docker script, you can use NPP with the following command-line syntax:
+
+
+``` npp_docker -i input -o preprocessed```
+
+Note: Please replace npp with the actual name of the NPP command-line tool.
+
+In this command, "input" represents the path to the input image and "preprocessed" is the pre-processed output. NPP generates brain mask, intensity normalized brain and intensity normalized brain in the standard coordinate space. For the large majority of images with voxel sizes near 1 mm3, NPP should run in less than 10 seconds on the CPU. As image size or resolution increases, the runtime might increase as well. If you encounter any issues, please contact the NPP development team for support.
 
 # NPP Papers
 
@@ -33,15 +42,6 @@ If you use NPP or some part of the code, please cite:
 
     **Neural Pre-Processing: A Learning Framework for End-to-end Brain MRI Pre-processing.**  
 
-## Usage
-Once you download the Neural Pre-processing docker script, you can use NPP with the following command-line syntax:
-
-
-``` npp_docker -i input -o preprocessed```
-
-Note: Please replace npp with the actual name of the NPP command-line tool.
-
-In this command, "input" represents the path to the input image and "preprocessed" is the pre-processed output. NPP generates brain mask, intensity normalized brain and intensity normalized brain in the standard coordinate space. For the large majority of images with voxel sizes near 1 mm3, NPP should run in less than 10 seconds on the CPU. As image size or resolution increases, the runtime might increase as well. If you encounter any issues, please contact the NPP development team for support.
 
 # Pre-trained models
 See list of pre-trained models available [here](data/readme.md#models).
