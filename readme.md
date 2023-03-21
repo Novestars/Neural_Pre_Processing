@@ -36,13 +36,9 @@ If you use NPP or some part of the code, please cite:
 ## Usage
 Once you download the Neural Pre-processing docker script, you can use NPP with the following command-line syntax:
 
-```
-curl -O https://raw.githubusercontent.com/Novestars/Neural-Pre-processing/blob/master/npp_docker && chmod +x npp_docker
-```
+```curl -O https://raw.githubusercontent.com/Novestars/Neural-Pre-processing/blob/master/npp_docker && chmod +x npp_docker``` 
 
-``` 
-npp_docker -i input -o preprocessed
-```
+``` npp_docker -i input -o preprocessed```
 
 Note: Please replace npp with the actual name of the NPP command-line tool.
 
