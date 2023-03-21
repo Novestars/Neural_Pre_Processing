@@ -1,4 +1,5 @@
 # Neural Pre-processing(NPP) 
+![Alt text for the image](Image_URL)
 
 **Objective**: NPP is an end-to-end weakly supervised learning approach for converting raw head MRI images to intensity-normalized, skull-stripped brain in a standard coordinate space. 
 
