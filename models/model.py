@@ -180,14 +180,13 @@ class UNet(nn.Module):
         x2_1 = self.conv2_1(torch.cat([x2_0, self.up(x3_1)], 1))*mod[-5].reshape(1,-1,1,1,1)+ mod[-6].reshape(1,-1,1,1,1)
         x1_1 = self.conv1_1(torch.cat([x1_0, self.up(x2_1)], 1))*mod[-7].reshape(1,-1,1,1,1)+ mod[-8].reshape(1,-1,1,1,1)
         x0_1 = self.conv0_1(torch.cat([x0_0, self.up(x1_1)], 1))*mod[-9].reshape(1,-1,1,1,1)+ mod[-10].reshape(1,-1,1,1,1)
-
+ 
         output = self.final(x0_1)
         output_upsampled = torch.nn.functional.interpolate(output, size=[256, 256, 256],mode='trilinear', align_corners=False)
-        output_warped = input * output_upsampled
-        output_warped_atlas = torch.nn.functional.grid_sample(output_warped.detach(), x0_0_warp, align_corners=False)
-        output_warped = torch.nn.functional.grid_sample(output_warped, x0_0_warp, align_corners=False)
+        norm = input*255 * output_upsampled
+        mni_norm = torch.nn.functional.grid_sample(norm, x0_0_warp, align_corners=False)
 
-        return output,output_warped,input,x0_0_warp,output_warped_atlas
+        return mni_norm,norm,output_upsampled
 class NPP(LightningModule): 
     def __init__(
         self,

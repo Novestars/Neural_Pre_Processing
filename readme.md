@@ -28,7 +28,7 @@ Please read the brief instructions at the top of the downloaded script.
 # NPP Papers
 
 If you use NPP or some part of the code, please cite:
-
+ 
   * Neural Pre-processing:   
 
     **Neural Pre-Processing: A Learning Framework for End-to-end Brain MRI Pre-processing.**  
@@ -36,7 +36,13 @@ If you use NPP or some part of the code, please cite:
 ## Usage
 Once you download the Neural Pre-processing docker script, you can use NPP with the following command-line syntax:
 
-```npp -i input -o preprocessed```
+```
+curl -O https://raw.githubusercontent.com/freesurfer/freesurfer/dev/mri_synthstrip/synthstrip-singularity && chmod +x synthstrip-singularity
+```
+
+``` 
+npp -i input -o preprocessed
+```
 
 Note: Please replace npp with the actual name of the NPP command-line tool.
 

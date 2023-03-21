@@ -1,6 +1,8 @@
+torchio==0.18.63
 einops==0.4.0
 nibabel==3.2.1
-numpy==1.19.5
-pytorch_lightning==1.8.5
-torch==1.13.1
-torchio==0.18.63
+numpy==1.24.2
+pytorch_lightning==1.5.10
+torch==1.10.2
+SimpleITK==2.2.1
+surfa==0.4.2
