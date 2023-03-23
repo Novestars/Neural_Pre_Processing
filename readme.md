@@ -10,7 +10,7 @@
 # Instructions
 Neural Pre-processing (NPP) can be accessed in two ways - as a python library package or as a standalone utility using Docker or Singularity containers.
 
-## Python library package
+## Python library package (TODO)
 To use the NPP library, either clone this repository and install the requirements listed in `setup.py` or install directly with pip.
 
 ```
@@ -26,7 +26,7 @@ Docker: To download the Docker-based wrapper script, run:
 Please read the brief instructions at the top of the downloaded script. 
 ### Usage
 Once you download the Neural Pre-processing docker script, you can use NPP with the following command-line syntax:
-
+ 
 
 ``` npp_docker -i input -o preprocessed```
 
