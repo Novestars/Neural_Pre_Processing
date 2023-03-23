@@ -39,7 +39,8 @@ If you use NPP or some part of the code, please cite:
   * Neural Pre-processing:   
 
     **Neural Pre-Processing: A Learning Framework for End-to-end Brain MRI Pre-processing.**  
-
+[Xinzi], [Alan Wang], [Mert R. Sabuncu](http://sabuncu.engineering.cornell.edu/)  
+arXiv 2023. [eprint arXiv:2303.12148](https://arxiv.org/abs/2303.12148)
 
 # Pre-trained models
 See list of pre-trained models available [here](data/readme.md#models).
