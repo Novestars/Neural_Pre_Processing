@@ -22,7 +22,7 @@ If you do not want to install our software package, you can run NPP through a st
 
 Docker: To download the Docker-based wrapper script, run:
 
-```curl -O https://raw.githubusercontent.com/Novestars/Neural-Pre-processing/blob/master/npp_docker && chmod +x npp_docker``` 
+```curl -O https://raw.githubusercontent.com/Novestars/Neural-Pre-processing/master/npp_docker && chmod +x npp_docker``` 
 
 Please read the brief instructions at the top of the downloaded script. 
 ### Usage
