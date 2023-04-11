@@ -2,7 +2,7 @@
 
 from __future__ import print_function
 
-# -------------------------------- SynthStrip --------------------------------
+# -------------------------------- Neural pre_processing --------------------------------
 
 # This is a short wrapper script around a Docker-ized version of SynthStrip.
 # The aim of this script is to minimize the effort required to use the
