@@ -44,7 +44,7 @@ If you use NPP or some part of the code, please cite:
 arXiv 2023. [eprint arXiv:2303.12148](https://arxiv.org/abs/2303.12148)
 
 # Pre-trained models
-See list of pre-trained models available [here](data/readme.md#models).
+See list of pre-trained models available [here](https://www.dropbox.com/s/zbwuqinhuvf0thz/npp_v1.pth?dl=0).
 
 # Data:
 The Neural Pre-processing (NPP) model has been trained on a combination of seven different datasets, namely GSP, ADNI, OASIS, ADHD, ABIDE, MCIC, and COBRE. However, please note that most of the data used in the NPP papers cannot be shared due to redistribution restrictions. Nonetheless, if any researcher requires access to the Freesurfer outputs utilized during the training process, please feel free to contact me.
