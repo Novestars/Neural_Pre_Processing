@@ -94,9 +94,9 @@ with torch.no_grad():
     scalar_field = output[2].cpu().numpy().squeeze().astype(np.int16)
 
 # unconform the sdt and extract mask
-mni_norm = conformed.new(mni_norm).resample_like(image,method='nearest', fill=0)
-norm = conformed.new(norm).resample_like(image, method='nearest',fill=0)
-scalar_field = conformed.new(scalar_field).resample_like(image, method='nearest',fill=0)
+mni_norm = conformed.new(mni_norm)#.resample_like(image,method='nearest', fill=0)
+norm = conformed.new(norm)#.resample_like(image, method='nearest',fill=0)
+scalar_field = conformed.new(scalar_field)#.resample_like(image, method='nearest',fill=0)
 
 # write the masked output
 if args.out:
