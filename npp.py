@@ -30,7 +30,6 @@ if len(sys.argv) == 1:
     parser.print_help()
     exit(1)
 
-sys.argv = sys.argv[:1]
 args = parser.parse_args()
 
 # sanity check on the inputs
