@@ -30,7 +30,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+import numpy as np
 
 def find_named_module(module, query):
     """Helper function to find a named module. Returns a `nn.Module` or `None`
