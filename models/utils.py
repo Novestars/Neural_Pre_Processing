@@ -288,14 +288,14 @@ def scalecrop(data, dst_min, dst_max, src_min, scale):
     return data_new
 
 
-def normalize(img, order=1):
+def normalize(img):
     src_min, scale = getscale(img.data, 0, 255)
 
     if not img.data.dtype == np.dtype(np.uint8):
         new_data = scalecrop(img.data, 0, 255, src_min, scale)
 
     new_img = img
-    new_img.data = np.uint(new_data)
-    new_img.astype(np.uint8)
+    new_img.data = new_data/255
 
     return new_img
+

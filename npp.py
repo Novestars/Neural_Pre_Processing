@@ -84,8 +84,10 @@ print(f'Input image read from: {args.image}')
 if image.nframes > 1:
     sf.system.fatal('Input image cannot have more than 1 frame')
 
-# normalize image to [0, 255]
+# normalize image to [0, 255] and to [0, 1]
 image = normalize(image)
+
+
 # conform image and fit to shape with factors of 64
 conformed = image.conform(voxsize=1.0, dtype='float32',shape=(256,256,256), method='nearest', orientation='LIA')
 
