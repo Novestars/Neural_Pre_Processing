@@ -8,11 +8,15 @@ import argparse
 import surfa as sf
 import scipy.ndimage
 from models.model import UNet
+from models.utils import normalize
+
 description = ''' 
 Neural Pre-processing (NPP) converts Head MRI images
 to an intensity-normalized, skull-stripped brain in a standard coordi-
 nate space. If you use NPP in your analysis, please cite:
 '''
+
+# os.system(f'python npp.py -i {inputfname} -o {outputdir}')
 
 # parse command line
 parser = argparse.ArgumentParser(description=description)
@@ -25,6 +29,11 @@ parser.add_argument('-g', '--gpu', action='store_true', help='Use the GPU.')
 if len(sys.argv) == 1:
     parser.print_help()
     exit(1)
+
+sys.argv = sys.argv[:1]
+sys.argv.append('-i/home/heejong/HDD4T/downloads/84595790/studyId/2856423677/RTSTRUCT_MRI.nii.gz')
+sys.argv.append('-o/home/heejong/HDD4T/downloads/84595790/studyId/2856423677/')
+
 args = parser.parse_args()
 
 # sanity check on the inputs
@@ -79,11 +88,10 @@ print(f'Input image read from: {args.image}')
 if image.nframes > 1:
     sf.system.fatal('Input image cannot have more than 1 frame')
 
+# normalize image to [0, 255]
+image = normalize(image)
 # conform image and fit to shape with factors of 64
 conformed = image.conform(voxsize=1.0, dtype='float32',shape=(256,256,256), method='nearest', orientation='LIA')
-
-# normalize intensities
-conformed = (conformed / 255).clip(0, 1)
 
 # predict the surface distance transform
 with torch.no_grad():

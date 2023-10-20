@@ -193,3 +193,109 @@ def meshgrid2d(N: int, C: int, H: int, W: int, device: torch.device):
     """Create a 2D meshgrid for interpolation."""
     theta = torch.eye(2, 3, device=device).unsqueeze(0).expand(N, 2, 3)
     return F.affine_grid(theta, (N, C, H, W), align_corners=False)
+
+
+
+
+def getscale(data, dst_min, dst_max, f_low=0.0, f_high=0.999):
+    """
+    Function to get offset and scale of image intensities to robustly rescale to range dst_min..dst_max.
+    Equivalent to how mri_convert conforms images.
+    :param np.ndarray data: image data (intensity values)
+    :param float dst_min: future minimal intensity value
+    :param float dst_max: future maximal intensity value
+    :param f_low: robust cropping at low end (0.0 no cropping)
+    :param f_high: robust cropping at higher end (0.999 crop one thousandths of high intensity voxels)
+    :return: float src_min: (adjusted) offset
+    :return: float scale: scale factor
+    """
+    # get min and max from source
+    src_min = np.min(data)
+    src_max = np.max(data)
+
+    print("Input:    min: " + format(src_min) + "  max: " + format(src_max))
+
+    if f_low == 0.0 and f_high == 1.0:
+        return src_min, 1.0
+
+    # compute non-zeros and total vox num
+    nz = (np.abs(data) >= 1e-15).sum()
+    voxnum = data.shape[0] * data.shape[1] * data.shape[2]
+
+    # compute histogram
+    histosize = 1000
+    bin_size = (src_max - src_min) / histosize
+    hist, bin_edges = np.histogram(data, histosize)
+
+    # compute cummulative sum
+    cs = np.concatenate(([0], np.cumsum(hist)))
+
+    # get lower limit
+    nth = int(f_low * voxnum)
+    idx = np.where(cs < nth)
+
+    if len(idx[0]) > 0:
+        idx = idx[0][-1] + 1
+
+    else:
+        idx = 0
+
+    src_min = idx * bin_size + src_min
+
+    # print("bin min: "+format(idx)+"  nth: "+format(nth)+"  passed: "+format(cs[idx])+"\n")
+    # get upper limit
+    nth = voxnum - int((1.0 - f_high) * nz)
+    idx = np.where(cs >= nth)
+
+    if len(idx[0]) > 0:
+        idx = idx[0][0] - 2
+
+    else:
+        print('ERROR: rescale upper bound not found')
+
+    src_max = idx * bin_size + src_min
+    # print("bin max: "+format(idx)+"  nth: "+format(nth)+"  passed: "+format(voxnum-cs[idx])+"\n")
+
+    # scale
+    if src_min == src_max:
+        scale = 1.0
+
+    else:
+        scale = (dst_max - dst_min) / (src_max - src_min)
+
+    print("rescale:  min: " + format(src_min) + "  max: " + format(src_max) + "  scale: " + format(scale))
+
+    return src_min, scale
+
+
+
+def scalecrop(data, dst_min, dst_max, src_min, scale):
+    """
+    Function to crop the intensity ranges to specific min and max values
+    :param np.ndarray data: Image data (intensity values)
+    :param float dst_min: future minimal intensity value
+    :param float dst_max: future maximal intensity value
+    :param float src_min: minimal value to consider from source (crops below)
+    :param float scale: scale value by which source will be shifted
+    :return: np.ndarray data_new: scaled image data
+    """
+    data_new = dst_min + scale * (data - src_min)
+
+    # clip
+    data_new = np.clip(data_new, dst_min, dst_max)
+    print("Output:   min: " + format(data_new.min()) + "  max: " + format(data_new.max()))
+
+    return data_new
+
+
+def normalize(img, order=1):
+    src_min, scale = getscale(img.data, 0, 255)
+
+    if not img.data.dtype == np.dtype(np.uint8):
+        new_data = scalecrop(img.data, 0, 255, src_min, scale)
+
+    new_img = img
+    new_img.data = np.uint(new_data)
+    new_img.astype(np.uint8)
+
+    return new_img
