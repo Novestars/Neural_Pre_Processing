@@ -31,9 +31,6 @@ if len(sys.argv) == 1:
     exit(1)
 
 sys.argv = sys.argv[:1]
-sys.argv.append('-i/home/heejong/HDD4T/downloads/84595790/studyId/2856423677/RTSTRUCT_MRI.nii.gz')
-sys.argv.append('-o/home/heejong/HDD4T/downloads/84595790/studyId/2856423677/')
-
 args = parser.parse_args()
 
 # sanity check on the inputs
