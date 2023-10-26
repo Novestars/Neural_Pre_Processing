@@ -31,100 +31,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-
-def find_named_module(module, query):
-    """Helper function to find a named module. Returns a `nn.Module` or `None`
-
-    Args:
-        module (nn.Module): the root module
-        query (str): the module name to find
-
-    Returns:
-        nn.Module or None
-    """
-
-    return next((m for n, m in module.named_modules() if n == query), None)
-
-
-def find_named_buffer(module, query):
-    """Helper function to find a named buffer. Returns a `torch.Tensor` or `None`
-
-    Args:
-        module (nn.Module): the root module
-        query (str): the buffer name to find
-
-    Returns:
-        torch.Tensor or None
-    """
-    return next((b for n, b in module.named_buffers() if n == query), None)
-
-
-def _update_registered_buffer(
-    module,
-    buffer_name,
-    state_dict_key,
-    state_dict,
-    policy="resize_if_empty",
-    dtype=torch.int,
-):
-    new_size = state_dict[state_dict_key].size()
-    registered_buf = find_named_buffer(module, buffer_name)
-
-    if policy in ("resize_if_empty", "resize"):
-        if registered_buf is None:
-            raise RuntimeError(f'buffer "{buffer_name}" was not registered')
-
-        if policy == "resize" or registered_buf.numel() == 0:
-            registered_buf.resize_(new_size)
-
-    elif policy == "register":
-        if registered_buf is not None:
-            raise RuntimeError(f'buffer "{buffer_name}" was already registered')
-
-        module.register_buffer(buffer_name, torch.empty(new_size, dtype=dtype).fill_(0))
-
-    else:
-        raise ValueError(f'Invalid policy "{policy}"')
-
-
-def update_registered_buffers(
-    module,
-    module_name,
-    buffer_names,
-    state_dict,
-    policy="resize_if_empty",
-    dtype=torch.int,
-):
-    """Update the registered buffers in a module according to the tensors sized
-    in a state_dict.
-
-    (There's no way in torch to directly load a buffer with a dynamic size)
-
-    Args:
-        module (nn.Module): the module
-        module_name (str): module name in the state dict
-        buffer_names (list(str)): list of the buffer names to resize in the module
-        state_dict (dict): the state dict
-        policy (str): Update policy, choose from
-            ('resize_if_empty', 'resize', 'register')
-        dtype (dtype): Type of buffer to be registered (when policy is 'register')
-    """
-    valid_buffer_names = [n for n, _ in module.named_buffers()]
-    for buffer_name in buffer_names:
-        if buffer_name not in valid_buffer_names:
-            raise ValueError(f'Invalid buffer name "{buffer_name}"')
-
-    for buffer_name in buffer_names:
-        _update_registered_buffer(
-            module,
-            buffer_name,
-            f"{module_name}.{buffer_name}",
-            state_dict,
-            policy,
-            dtype,
-        )
-
-
+import os
+import pydicom
+import SimpleITK as sitk
+import nibabel as nib
 def conv(in_channels, out_channels, kernel_size=5, stride=2):
     return nn.Conv2d(
         in_channels,
@@ -213,7 +123,7 @@ def getscale(data, dst_min, dst_max, f_low=0.0, f_high=0.999):
     src_min = np.min(data)
     src_max = np.max(data)
 
-    print("Input:    min: " + format(src_min) + "  max: " + format(src_max))
+    #print("Input:    min: " + format(src_min) + "  max: " + format(src_max))
 
     if f_low == 0.0 and f_high == 1.0:
         return src_min, 1.0
@@ -263,7 +173,7 @@ def getscale(data, dst_min, dst_max, f_low=0.0, f_high=0.999):
     else:
         scale = (dst_max - dst_min) / (src_max - src_min)
 
-    print("rescale:  min: " + format(src_min) + "  max: " + format(src_max) + "  scale: " + format(scale))
+    #print("rescale:  min: " + format(src_min) + "  max: " + format(src_max) + "  scale: " + format(scale))
 
     return src_min, scale
 
@@ -283,7 +193,7 @@ def scalecrop(data, dst_min, dst_max, src_min, scale):
 
     # clip
     data_new = np.clip(data_new, dst_min, dst_max)
-    print("Output:   min: " + format(data_new.min()) + "  max: " + format(data_new.max()))
+    #print("Output:   min: " + format(data_new.min()) + "  max: " + format(data_new.max()))
 
     return data_new
 
@@ -293,9 +203,100 @@ def normalize(img):
 
     if not img.data.dtype == np.dtype(np.uint8):
         new_data = scalecrop(img.data, 0, 255, src_min, scale)
+    else:
+        new_data = img.data
 
-    new_img = img
-    new_img.data = new_data/255
+    img.data = new_data/255
 
-    return new_img
+    return img
+
+def find_nii_files(root_folder):
+    """
+    Walk through root_folder to find all .nii and .nii.gz files.
+
+    Parameters:
+    - root_folder: The starting directory from which to begin the search.
+
+    Returns:
+    - A list of full paths to .nii and .nii.gz files.
+    """
+    nii_files = []
+
+    for dirpath, dirnames, filenames in os.walk(root_folder):
+        for filename in filenames:
+            if filename.endswith(".nii.gz") or filename.endswith(".nii"):
+                full_path = os.path.join(dirpath, filename)
+                nii_files.append(full_path)
+
+    return nii_files
+
+def is_dicom_file(filepath):
+    """Check if a file is a valid DICOM file."""
+    try:
+        pydicom.dcmread(filepath, stop_before_pixels=True)
+        return True
+    except Exception:
+        return False
+
+def find_dicom_folders(root_folder):
+    """
+    Walk through root_folder to find all folders containing DICOM files.
+
+    Parameters:
+    - root_folder: The starting directory from which to begin the search.
+
+    Returns:
+    - A set of directories containing at least one DICOM file.
+    """
+    dicom_folders = set()
+
+    for dirpath, dirnames, filenames in os.walk(root_folder):
+        for filename in filenames:
+            full_path = os.path.join(dirpath, filename)
+            if is_dicom_file(full_path):
+                dicom_folders.add(dirpath)
+                break  # Once a DICOM file is found in a folder, no need to check other files in the same folder
+
+    return list(dicom_folders)
+
+
+def make_affine(simpleITKImage):
+    # get affine transform in LPS
+    c = [simpleITKImage.TransformContinuousIndexToPhysicalPoint(p)
+         for p in ((1, 0, 0),
+                   (0, 1, 0),
+                   (0, 0, 1),
+                   (0, 0, 0))]
+    c = np.array(c)
+    affine = np.concatenate([
+        np.concatenate([c[0:3] - c[3:], c[3:]], axis=0),
+        [[0.], [0.], [0.], [1.]]
+    ], axis=1)
+    affine = np.transpose(affine)
+    # convert to RAS to match nibabel
+    affine = np.matmul(np.diag([-1., -1., 1., 1.]), affine)
+    return affine
+
+def load_dicom_series(directory):
+    """Load DICOM series from a directory."""
+    # Get the list of DICOM series IDs in the directory
+    series_ids = sitk.ImageSeriesReader.GetGDCMSeriesIDs(directory)
+
+    if not series_ids:
+        raise ValueError(f"No DICOM series found in {directory}")
+
+    # For simplicity, load the first series.
+    # Modify if you have more than one series and you want to load them differently.
+    dicom_series_file_names = sitk.ImageSeriesReader.GetGDCMSeriesFileNames(directory, series_ids[0])
+
+    reader = sitk.ImageSeriesReader()
+    reader.SetFileNames(dicom_series_file_names)
+    img = reader.Execute()
+    img = sitk.PermuteAxes(img, [0, 2, 1])
+
+    affine = make_affine(img)
+    img = nib.Nifti1Image( sitk.GetArrayFromImage(img).transpose(), affine)
+
+    return img
+
 

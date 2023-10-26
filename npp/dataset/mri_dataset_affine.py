@@ -2,7 +2,6 @@ import os.path
 from torch.utils.data import Dataset
 import nibabel as nib
 from multiprocessing import Manager
-import random
 import torchio as tio
 import pickle
 import torch

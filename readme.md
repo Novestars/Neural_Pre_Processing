@@ -8,30 +8,25 @@
 **Results**: NPP outperforms the state-of-the-art methods, which tackle only a single sub-task, according to quantitative results. The importance of NPP's architecture design is demonstrated through ablation experiments. Additionally, NPP provides users with the flexibility to control each task during inference time. 
 
 # Instructions
-Neural Pre-processing (NPP) can be accessed in two ways - as a python library package or as a standalone utility using Docker or Singularity containers.
-
-## Python library package (TODO)
-To use the NPP library, either clone this repository and install the requirements listed in `setup.py` or install directly with pip.
+Neural Pre-processing (NPP) can be accessed as a python library package.
+ 
+## Python library package
+To use the NPP library, either clone this repository and install via 'pip install -e .' or install directly with pip.
 
 ```
 pip install npp
 ```
 
-## Containerized version
-If you do not want to install our software package, you can run NPP through a standalone script that wraps a Docker or a Singularity container. These wrappers provide an easy mechanism for running NPP containers, so you do not need to worry about mounting paths to input and output files. For those interested, the underlying build image is available on Docker Hub.
-
-Docker: To download the Docker-based wrapper script, run:
-
-```curl -O https://raw.githubusercontent.com/Novestars/Neural-Pre-processing/master/npp_docker && chmod +x npp_docker``` 
-
-Please read the brief instructions at the top of the downloaded script. 
 ### Usage
 Once you download the Neural Pre-processing docker script, you can use NPP with the following command-line syntax:
  
 
-``` npp_docker -i input -o preprocessed```
+``` 
+npp -i input_folder -o output_folder -s -g -w -1
+```
 
-In this command, "input" represents the path to the input image and "preprocessed" is the pre-processed output. NPP generates brain mask, intensity normalized brain and intensity normalized brain in the standard coordinate space. For the large majority of images with voxel sizes near 1 mm3, NPP should run in less than 10 seconds on the CPU. As image size or resolution increases, the runtime might increase as well. If you encounter any issues, please contact the NPP development team for support.
+In this command, "input_folder" represents the path to the input folder and "output_folder" is the pre-processed output folder path. NPP generates brain mask, intensity normalized brain and intensity normalized brain in the standard coordinate space. 
+For the large majority of images with voxel sizes near 1 mm3, NPP should run in less than 10 seconds on the CPU. As image size or resolution increases, the runtime might increase as well. If you encounter any issues, please contact the NPP development team for support.
 
 # NPP Papers
 
@@ -41,7 +36,9 @@ If you use NPP or some part of the code, please cite:
 
     **Neural Pre-Processing: A Learning Framework for End-to-end Brain MRI Pre-processing.**  
 [Xinzi He](https://www.bme.cornell.edu/research/grad-students/xinzi-he), Alan Wang, [Mert R. Sabuncu](http://sabuncu.engineering.cornell.edu/)  
-arXiv 2023. [eprint arXiv:2303.12148](https://arxiv.org/abs/2303.12148)
+Medical Image Computing and Computer Assisted Intervention 2023. \
+[Springer](https://doi.org/10.1007/978-3-031-43993-3_25)\
+[arXiv:2303.12148](https://arxiv.org/abs/2303.12148)
 
 # Pre-trained models
 See list of pre-trained models available [here](https://www.dropbox.com/s/zbwuqinhuvf0thz/npp_v1.pth?dl=0).

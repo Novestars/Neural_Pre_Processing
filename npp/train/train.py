@@ -1,12 +1,11 @@
 import argparse
-import random
 import shutil
 import sys
 import os
 import torch
 from torch.utils.data import DataLoader
-from models.model import NPP
-from dataset.mri_dataset_affine import Generate_dataset
+from npp.models.model import NPP
+from npp.dataset.mri_dataset_affine import Generate_dataset
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import LearningRateMonitor, ModelCheckpoint
 from pytorch_lightning.callbacks import RichProgressBar
