@@ -3,7 +3,7 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 from pytorch_lightning import LightningModule, Trainer
-from npp.models.losses import SSIM3D
+from models.losses import SSIM3D
 from einops import rearrange
 import numpy as np
 

@@ -1,7 +1,7 @@
 [project]
-name = "npp"
-version = "0.1.0"
-requires-python = ">=3.8"
+name = "nppy"
+version = "0.2.0"
+requires-python = ">=3.7"
 description = "Neural Pre-Processing: A Learning Framework for End-to-end Brain MRI Pre-processing."
 readme = "readme.md"
 license = { file = "LICENSE" }
@@ -14,7 +14,7 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Intended Audience :: Healthcare Industry",
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: Apache Software License",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Scientific/Engineering :: Image Recognition",
     "Topic :: Scientific/Engineering :: Medical Science Apps.",
@@ -24,7 +24,7 @@ keywords = [
     'brain MRI',
     'MRI preprocessing',
     'neural pre-processing',
-    'npp'
+    'nppy'
 ]
 
 dependencies = [
@@ -87,10 +87,11 @@ repository = "https://github.com/Novestars/Neural_Pre_Processing"
 
 [project.scripts]
 # You can add your script entry points here, e.g.
-npp = "npp.npp_inference:main"
+nppy = "inference.nppy_inference:main"
 
 [tool.codespell]
 skip = '.git,*.pdf,*.svg'
 # ignore-words-list = ''
-[tool.setuptools]
-py-modules = ['npp']
+[tool.setuptools.packages.find]
+where = ["nppy"]
+#include = ["*"]

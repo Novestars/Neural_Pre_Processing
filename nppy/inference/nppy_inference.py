@@ -5,8 +5,8 @@ import torch
 import numpy as np
 import argparse
 import surfa as sf
-from npp.models.model import UNet
-from npp.models.utils import normalize,find_dicom_folders,find_nii_files,load_dicom_series
+from models.model import UNet
+from models.utils import normalize,find_dicom_folders,find_nii_files,load_dicom_series
 import nibabel as nib
 from huggingface_hub import hf_hub_download
 from surfa import Volume
