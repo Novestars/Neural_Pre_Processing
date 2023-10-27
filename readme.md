@@ -1,4 +1,4 @@
-# Neural Pre-processing Python(NPPy) 
+# Neural Pre-processing Python(NPPY) 
 ![Top: An overview of Neural Pre-processing. Bottom: The network archiecture of Neural Pre-processing](figure/pipeline_v2.png)
 
 **Objective**: NPPY is an end-to-end weakly supervised learning approach for converting raw head MRI images to intensity-normalized, skull-stripped brain in a standard coordinate space. 
