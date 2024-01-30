@@ -66,6 +66,8 @@ def main():
 
     args = parser.parse_args()
 
+    print(args)
+
     # sanity check on the inputs
     if not args.out:
         sf.system.fatal('Must provide at least --out output flags.')
