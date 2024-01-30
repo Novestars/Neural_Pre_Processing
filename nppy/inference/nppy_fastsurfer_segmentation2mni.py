@@ -136,9 +136,8 @@ def main():
     transformed_label = conformed.new(transformed_label)
     # transformed_image = conformed.new(transformed_image)
 
-    if args.out:
-        filename = os.path.basename(args.image).split('.nii')[0]
-        labelfname = os.path.basename(args.label).split('.mgz')[0]
-        transformed_label.save(os.path.join(args.out, filename + '_' + labelfname + '_mni.nii.gz'))
-        print(f'Results saved to: {args.out}')
+    filename = os.path.basename(args.image).split('.nii')[0]
+    labelfname = os.path.basename(args.label).split('.mgz')[0]
+    transformed_label.save(os.path.join(args.out, filename + '_' + labelfname + '_mni.nii.gz'))
+    print(f'Results saved to: {args.out}')
 
