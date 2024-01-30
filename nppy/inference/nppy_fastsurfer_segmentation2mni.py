@@ -139,6 +139,6 @@ def main():
     if args.out:
         filename = os.path.basename(args.image).split('.nii')[0]
         labelfname = os.path.basename(args.label).split('.mgz')[0]
-        transformed_label.save(os.path.join(outputdir, filename + '_' + labelfname + '_mni.nii.gz'))
+        transformed_label.save(os.path.join(args.out, filename + '_' + labelfname + '_mni.nii.gz'))
         print(f'Results saved to: {args.out}')
 
